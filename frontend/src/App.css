@@ -1,0 +1,92 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  /*background: linear-gradient(to right, #4facfe, #00f2fe);*/
+  background: url("https://tse4.mm.bing.net/th/id/OIP.Z1G6YVHj1Jk4Vg6Pl1RPnQHaDJ?rs=1&pid=ImgDetMain&o=7&rm=3");
+  color: white;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 600px;
+  padding: 20px;
+}
+
+.hero-heading {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+   color: #ffffff;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+ 
+}
+
+.find-jobs-btn {
+  background-color: #288af4;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.find-jobs-btn:hover {
+  background-color:  #0264cd;
+}
+
+/* Search Job Section */
+.search-job {
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.location-dropdown {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+  background-color: #0264cd;
+}

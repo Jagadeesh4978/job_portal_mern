@@ -3,6 +3,8 @@ import MainLayout from "./components/MainLayout";
 import Homepage from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import JobListing from "./pages/jobListing";
+import JobDetails from "./pages/JobDetails";
 import "./App.css";
 
 function App() {
@@ -11,8 +13,8 @@ function App() {
       {/* Pages WITH Navbar */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Homepage />} />
-        <Route path="/jobs" element={<div>Jobs Page</div>} />
-        <Route path="/companies" element={<div>Companies</div>} />
+        <Route path="/jobs" element={<JobListing />} />
+        <Route path="/jobs/:id" element={<JobDetails />} />
       </Route>
 
       {/* Pages WITHOUT Navbar */}

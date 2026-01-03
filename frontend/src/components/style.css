@@ -1,71 +1,218 @@
+
 /* Navbar container */
 nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
+  width: 100%;
+  height: 64px;
   background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 /* Logo */
-nav div a {
-  font-size: 24px;
-  font-weight: bold;
+nav > div:first-child a {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2563eb;
   text-decoration: none;
-  color: #0a83fc;
 }
 
-/* Navigation list */
+/* Navigation links */
 nav ul {
   display: flex;
   list-style: none;
-  gap: 25px;
-  margin: 0;
-  padding: 0;
+  gap: 24px;
 }
 
-/* Nav links */
 nav ul li a {
-  position: relative;
   text-decoration: none;
-  font-size: 16px;
-  color: #333;
-  padding-bottom: 5px;
+  color: #374151;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-/* Underline effect */
-nav ul li a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background-color: #007bff;
-  transition: width 0.3s ease;
+nav ul li a:hover {
+  color: #2563eb;
 }
 
-/* Hover underline animation */
-nav ul li a:hover::after {
-  width: 100%;
-   color: #007bff;
-}
-
-
-/* Login/Register button */
+/* Login button */
 nav button {
-  padding: 8px 18px;
-  font-size: 14px;
-  background-color: #007bff;
+  background-color: #2563eb;
   color: #ffffff;
   border: none;
-  border-radius: 4px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-/* Button hover */
 nav button:hover {
-  background-color: #0056b3;
+  background-color: #1e40af;
+}
+
+/* Profile section */
+/* Wrapper */
+.nav-right {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Profile image */
+.profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Dropdown card */
+.profile-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 260px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  z-index: 1000;
+}
+
+/* Header section */
+.profile-header {
+  padding: 16px;
+}
+
+.profile-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.profile-header p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #666;
+  word-break: break-all;
+}
+
+/* Divider */
+.profile-divider {
+  height: 1px;
+  background-color: #e5e5e5;
+}
+
+/* Menu */
+.profile-menu {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+}
+
+/* Menu items */
+.profile-menu li {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.profile-menu li:hover {
+  background-color: #f5f7fa;
+}
+
+/* Logout */
+.profile-menu .logout {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+
+/* ========================= */
+/* Responsive Design */
+/* ========================= */
+
+@media (max-width: 768px) {
+  nav {
+    padding: 0 16px;
+  }
+
+  nav ul {
+    display: none; /* hide menu on mobile */
+  }
+
+  nav button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    width: 180px;
+  }
+
+  .profile-card h4 {
+    font-size: 14px;
+  }
+
+  .profile-card ul li {
+    font-size: 13px;
+  }
+}
+
+
+
+
+
+
+
+.footer {
+  background: #1f1f1f;
+  color: #fff;
+  padding: 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.footer h4 {
+  margin-bottom: 12px;
+}
+
+.footer p {
+  font-size: 14px;
+  cursor: pointer;
+  margin: 6px 0;
+}
+
+.footer p:hover {
+  color: #ff7a00;
+}
+
+.store-btn {
+  display: block;
+  margin-top: 10px;
+  padding: 8px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 13px;
+  color: #aaa;
 }

@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
 
 const Login = () => {
   const navigate = useNavigate();
 
+  // optional: to capture inputs (for future API)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleLogin = (e) => {
     e.preventDefault(); // prevent page reload
 
-    // TODO: validate user / call API later
+    // ✅ TEMP LOGIN LOGIC (replace with backend later)
+    if (username && password) {
+      // 🔑 STEP 1: SAVE LOGIN STATUS
+      localStorage.setItem("isLoggedIn", "true");
 
-    // Redirect to Home page
-    navigate("/");
+      // optional: store username
+      localStorage.setItem("userName", username);
+
+      // Redirect to Home page
+      navigate("/");
+    }
   };
 
   return (
@@ -21,11 +32,23 @@ const Login = () => {
           <h2>Login</h2>
 
           <div className="input-box">
-            <input type="text" placeholder="Username" required />
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
           </div>
 
           <div className="input-box">
-            <input type="password" placeholder="Password" required />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           <div className="remember-forgot">

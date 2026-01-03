@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
+
 const Navbar = () => {
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // ✅ Check login status when navbar loads
+  useEffect(() => {
+    const loginStatus = localStorage.getItem("isLoggedIn");
+    if (loginStatus === "true") {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    setOpen(false);
+    navigate("/login");
+  };
 
   return (
     <nav>
@@ -11,28 +30,56 @@ const Navbar = () => {
         <Link to="/">JobSearch</Link>
       </div>
 
-      {/* Navigation Links */}
+      {/* Menu */}
       <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/jobs">Jobs</Link>
-        </li>
-        <li>
-          <Link to="/companies">Companies</Link>
-        </li>
-        <li>
-          <Link to="/about">About</Link>
-        </li>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/jobs">Jobs</Link></li>
+        <li><Link to="/companies">Companies</Link></li>
+        <li><Link to="/about">About</Link></li>
       </ul>
 
-      {/* Login / Register */}
-      <div>
+      {/* 🔐 NOT LOGGED IN */}
+      {!isLoggedIn && (
         <button onClick={() => navigate("/login")}>
           Login / Register
         </button>
-      </div>
+      )}
+
+      {/* 🔐 LOGGED IN */}
+      {isLoggedIn && (
+        <div className="nav-right">
+          {/* Profile Image */}
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            alt="profile"
+            className="profile-img"
+            onClick={() => setOpen(!open)}
+          />
+
+          {/* Dropdown Menu */}
+          {open && (
+            <div className="profile-dropdown">
+              <div className="profile-header">
+                <h4>{localStorage.getItem("userName")}</h4>
+                <p>{localStorage.getItem("userEmail") || "user@email.com"}</p>
+              </div>
+
+              <div className="profile-divider" />
+
+              <ul className="profile-menu">
+                <li>View Profile</li>
+                <li>Applied Jobs</li>
+                <li>Saved Jobs</li>
+                <li className="logout" onClick={handleLogout}>
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+
+
+      )}
     </nav>
   );
 };

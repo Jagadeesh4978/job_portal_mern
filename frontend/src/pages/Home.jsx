@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 //import Navbar from "../components/Navbar";
 import "./style.css";
+import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
+
+
+
 /* Search Job Section Component */
 const SearchJobSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -43,6 +48,7 @@ const SearchJobSection = () => {
 
 /* Homepage Component */
 const Homepage = () => {
+  const navigate = useNavigate();
   const jobs = [
     { id: 1, title: "Software Engineer", company: "TechCorp", location: "New York, NY" },
     { id: 2, title: "Data Analyst", company: "DataSolutions", location: "San Francisco, CA" },
@@ -100,8 +106,20 @@ const Homepage = () => {
             </div>
           ))}
         </div>
+
+        <div className="see-more-wrapper">
+          <button
+            className="see-more-btn"
+            onClick={() => navigate("/jobs")}
+          >
+            See More
+          </button>
+
+        </div>
       </section>
+      <Footer />
     </div>
+
   );
 };
 

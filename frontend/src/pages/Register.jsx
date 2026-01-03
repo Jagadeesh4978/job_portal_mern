@@ -18,6 +18,14 @@ const Register = () => {
             <input type="email" placeholder="Email" required />
           </div>
 
+             <div className="input-box">
+            <select required>
+              <option value="">Select User Type</option>
+              <option value="jobseeker">Job Seeker</option>
+              <option value="employer">Employer</option>
+            </select>
+          </div>
+
           <div className="input-box">
             <input type="password" placeholder="Create Password" required />
           </div>

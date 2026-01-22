@@ -59,11 +59,11 @@ const Homepage = () => {
   ];
 
   const handleApply = (jobId) => {
-    console.log("Applying for job:", jobId);
+    navigate(`/apply/${jobId}`);
   };
 
   const handleViewDetails = (jobId) => {
-    console.log("Viewing details for job:", jobId);
+    navigate(`/jobs/${jobId}`);
   };
 
   return (
@@ -80,9 +80,6 @@ const Homepage = () => {
             Whether you're a job seeker or an employee looking to advance, our platform
             makes it easy to find the perfect match.
           </p>
-          <button className="find-jobs-btn">
-            Find Jobs
-          </button>
         </div>
       </section>
 

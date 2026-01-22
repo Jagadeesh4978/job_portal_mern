@@ -7,6 +7,7 @@ const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // ✅ Check login status when navbar loads
   useEffect(() => {
@@ -23,6 +24,14 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/jobs?search=${searchTerm}`);
+      setSearchTerm("");
+    }
+  };
+
   return (
     <nav>
       {/* Logo */}
@@ -30,12 +39,26 @@ const Navbar = () => {
         <Link to="/">JobSearch</Link>
       </div>
 
+      {/* Search Bar */}
+      <form className="navbar-search" onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="Search jobs..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+        <button type="submit" className="search-btn">
+          Search
+        </button>
+      </form>
+
       {/* Menu */}
       <ul>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/jobs">Jobs</Link></li>
-        <li><Link to="/companies">Companies</Link></li>
-        <li><Link to="/about">About</Link></li>
+        <li><Link to="/prepare">Prepare</Link></li>
+        <li><Link to="/prepare-resume">Resume Builder</Link></li>
       </ul>
 
       {/* 🔐 NOT LOGGED IN */}

@@ -52,7 +52,7 @@ const JobDetails = () => {
 
           <div className="job-actions">
             <button className="save-btn">Save</button>
-            <button className="apply-btn">Apply</button>
+            <button className="apply-btn" onClick={() => navigate(`/apply/${id}`)}>Apply</button>
           </div>
         </div>
 

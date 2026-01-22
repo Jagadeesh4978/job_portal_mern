@@ -68,7 +68,7 @@ const PrepResume = () => {
         {activeTab === "builder" && (
           <ResumeBuilder
             selectedTemplate={selectedTemplate}
-            resumeData={resumeData}
+            resumeData={resumeData}  
             onDataChange={handleResumeDataChange}
           />
         )}

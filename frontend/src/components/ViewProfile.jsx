@@ -11,7 +11,7 @@ const ViewProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
 
-  // ✅ Fetch user profile on component mount
+  // Fetch user profile on component mount
   useEffect(() => {
     fetchProfile();
   }, [navigate]);
@@ -109,7 +109,7 @@ const ViewProfile = () => {
             textAlign: 'center'
           }}>
             <p style={{color: '#e74c3c', fontSize: '16px', marginBottom: '20px'}}>
-              ❌ {error}
+              {error}
             </p>
             <button 
               onClick={() => navigate("/login")}
@@ -137,10 +137,10 @@ const ViewProfile = () => {
       <div className="profile-container">
         {/* Header */}
         <div className="profile-header-section">
-          <h1>👤 My Profile</h1>
+          <h1>My Profile</h1>
           {!isEditing && (
             <button className="edit-btn" onClick={handleEdit}>
-              ✏️ Edit Profile
+              Edit Profile
             </button>
           )}
         </div>
@@ -149,7 +149,7 @@ const ViewProfile = () => {
         <div className="profile-card">
           {/* Personal Information */}
           <div className="profile-section">
-            <h2>📋 Personal Information</h2>
+            <h2>Personal Information</h2>
             <div className="profile-grid">
               <div className="profile-field">
                 <label>First Name</label>
@@ -216,7 +216,7 @@ const ViewProfile = () => {
                 <p className="badge" style={{
                   backgroundColor: profile?.userType === 'employer' ? '#e74c3c' : '#27ae60'
                 }}>
-                  {profile?.userType === 'employer' ? '💼 Employer' : '👤 Job Seeker'}
+                  {profile?.userType === 'employer' ? 'Employer' : 'Job Seeker'}
                 </p>
               </div>
             </div>
@@ -224,7 +224,7 @@ const ViewProfile = () => {
 
           {/* Bio */}
           <div className="profile-section">
-            <h2>📝 Bio</h2>
+            <h2>Bio</h2>
             <div className="profile-field full-width">
               <label>About You</label>
               {isEditing ? (
@@ -244,7 +244,7 @@ const ViewProfile = () => {
 
           {/* Skills */}
           <div className="profile-section">
-            <h2>🔧 Skills</h2>
+            <h2>Skills</h2>
             {isEditing ? (
               <div className="profile-field full-width">
                 <textarea
@@ -274,7 +274,7 @@ const ViewProfile = () => {
 
           {/* Experience */}
           <div className="profile-section">
-            <h2>💼 Experience</h2>
+            <h2>Experience</h2>
             {profile?.experience && profile.experience.length > 0 ? (
               profile.experience.map((exp, idx) => (
                 <div key={idx} className="experience-item">
@@ -291,7 +291,7 @@ const ViewProfile = () => {
 
           {/* Education */}
           <div className="profile-section">
-            <h2>🎓 Education</h2>
+            <h2>Education</h2>
             {profile?.education && profile.education.length > 0 ? (
               profile.education.map((edu, idx) => (
                 <div key={idx} className="education-item">
@@ -308,7 +308,7 @@ const ViewProfile = () => {
 
           {/* Account Information */}
           <div className="profile-section">
-            <h2>🔐 Account Information</h2>
+            <h2>Account Information</h2>
             <div className="profile-grid">
               <div className="profile-field">
                 <label>Member Since</label>
@@ -317,7 +317,7 @@ const ViewProfile = () => {
               <div className="profile-field">
                 <label>Profile Status</label>
                 <p className="badge" style={{ backgroundColor: '#3498db' }}>
-                  ✅ Active
+                  Active
                 </p>
               </div>
             </div>
@@ -327,10 +327,10 @@ const ViewProfile = () => {
           {isEditing && (
             <div className="profile-actions">
               <button className="save-btn" onClick={handleSaveProfile}>
-                💾 Save Changes
+                Save Changes
               </button>
               <button className="cancel-btn" onClick={handleCancel}>
-                ❌ Cancel
+                Cancel
               </button>
             </div>
           )}
@@ -338,7 +338,7 @@ const ViewProfile = () => {
           {!isEditing && (
             <div className="profile-actions">
               <button className="back-btn" onClick={() => navigate("/")}>
-                ← Back to Home
+                Back to Home
               </button>
             </div>
           )}

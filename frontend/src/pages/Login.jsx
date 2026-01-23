@@ -7,17 +7,21 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [toast, setToast] = useState(null);
 
   // Form states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     // Validation
     if (!email || !password) {
@@ -35,7 +39,8 @@ const Login = () => {
 
       // Check for error first
       if (data.error) {
-        setError("❌ " + data.error);
+        setError(data.error);
+        showToast(data.error, 'error');
         return;
       }
 
@@ -63,14 +68,17 @@ const Login = () => {
           localStorage.setItem("savedEmail", email);
         }
 
-        setSuccess("✅ Login successful! Redirecting...");
+        const userName = `${data.user.firstName} ${data.user.lastName}`;
+        showToast(`${userName} logged in successfully!`, 'success');
+        
         setTimeout(() => {
           navigate("/");
-        }, 1000);
+        }, 2000);
       }
     } catch (err) {
       console.error("Login error:", err);
-      setError("❌ Login failed. Make sure backend server is running.");
+      setError("Login failed. Make sure backend server is running.");
+      showToast("Login failed. Make sure backend server is running.", 'error');
     } finally {
       setLoading(false);
     }
@@ -87,12 +95,26 @@ const Login = () => {
 
   return (
     <div className="login-body">
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`toast-notification ${toast.type}`}>
+          <div className="toast-content">
+            <span className="toast-message">{toast.message}</span>
+            <button 
+              className="toast-close"
+              onClick={() => setToast(null)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="wrapper">
         <form onSubmit={handleLogin}>
           <h2>Login</h2>
 
           {error && <div className="error-message" style={{ color: "red", marginBottom: "10px" }}>{error}</div>}
-          {success && <div className="success-message" style={{ color: "green", marginBottom: "10px" }}>{success}</div>}
 
           <div className="input-box">
             <input

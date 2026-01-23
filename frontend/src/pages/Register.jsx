@@ -7,7 +7,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [toast, setToast] = useState(null);
 
   // Form states
   const [fullName, setFullName] = useState("");
@@ -17,10 +17,14 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     // Validation
     if (!fullName || !email || !phone || !userType || !password || !confirmPassword) {
@@ -60,21 +64,23 @@ const Register = () => {
 
       // Check for error first
       if (data.error) {
-        setError("❌ " + data.error);
+        setError(data.error);
+        showToast(data.error, 'error');
         return;
       }
 
       // Check for success
       if (data.message && data.userId) {
         // Success
-        setSuccess("✅ Registration successful! Redirecting to login...");
+        showToast("Registration successful! Redirecting to login...", 'success');
         setTimeout(() => {
           navigate("/login");
-        }, 1500);
+        }, 2000);
       }
     } catch (err) {
       console.error("Registration error:", err);
-      setError("❌ Registration failed. Please try again.");
+      setError("Registration failed. Please try again.");
+      showToast("Registration failed. Please try again.", 'error');
     } finally {
       setLoading(false);
     }
@@ -82,12 +88,26 @@ const Register = () => {
 
   return (
     <div className="login-body">
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`toast-notification ${toast.type}`}>
+          <div className="toast-content">
+            <span className="toast-message">{toast.message}</span>
+            <button 
+              className="toast-close"
+              onClick={() => setToast(null)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="wrapper">
         <form onSubmit={handleRegister}>
           <h2>Register</h2>
 
           {error && <div className="error-message" style={{ color: "red", marginBottom: "10px" }}>{error}</div>}
-          {success && <div className="success-message" style={{ color: "green", marginBottom: "10px" }}>{success}</div>}
 
           <div className="input-box">
             <input

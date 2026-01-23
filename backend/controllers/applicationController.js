@@ -98,7 +98,7 @@ exports.getApplicationsByUser = async (req, res) => {
     const userId = req.params.userId;
 
     const applications = await Application.find({ applicant: userId })
-      .populate('job', 'title company location salary jobType')
+      .populate('job', 'title company location salary jobType description')
       .sort({ appliedAt: -1 });
 
     res.status(200).json({

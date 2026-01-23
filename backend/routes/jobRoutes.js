@@ -23,4 +23,16 @@ router.get('/search/query', jobController.searchJobs);
 // ✅ Get Jobs by User
 router.get('/user/:userId', jobController.getJobsByUser);
 
+// ✅ Save Job
+router.post('/save', jobController.saveJob);
+
+// ✅ Unsave Job
+router.post('/unsave', jobController.unsaveJob);
+
+// ✅ Get Saved Jobs
+router.get('/saved/:userId', jobController.getSavedJobs);
+
+// ✅ Check if Job is Saved
+router.get('/check-saved/:userId', jobController.isJobSaved);
+
 module.exports = router;

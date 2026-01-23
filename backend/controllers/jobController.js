@@ -172,3 +172,115 @@ exports.getJobsByUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// ✅ Save Job
+exports.saveJob = async (req, res) => {
+  try {
+    const { userId, jobId } = req.body;
+
+    if (!userId || !jobId) {
+      return res.status(400).json({ error: 'userId and jobId are required' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if job is already saved
+    if (user.savedJobs.includes(jobId)) {
+      return res.status(400).json({ error: 'Job already saved' });
+    }
+
+    // Add job to saved jobs
+    user.savedJobs.push(jobId);
+    await user.save();
+
+    res.status(200).json({
+      message: 'Job saved successfully',
+      savedJobs: user.savedJobs,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ✅ Unsave Job
+exports.unsaveJob = async (req, res) => {
+  try {
+    const { userId, jobId } = req.body;
+
+    if (!userId || !jobId) {
+      return res.status(400).json({ error: 'userId and jobId are required' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Remove job from saved jobs
+    user.savedJobs = user.savedJobs.filter(id => id.toString() !== jobId);
+    await user.save();
+
+    res.status(200).json({
+      message: 'Job unsaved successfully',
+      savedJobs: user.savedJobs,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ✅ Get Saved Jobs
+exports.getSavedJobs = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId).populate('savedJobs');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Populate job details with company info
+    const savedJobsWithDetails = await Promise.all(
+      user.savedJobs.map(async (jobId) => {
+        const job = await Job.findById(jobId).populate('postedBy', 'firstName lastName email company');
+        return job;
+      })
+    );
+
+    res.status(200).json({
+      count: savedJobsWithDetails.length,
+      savedJobs: savedJobsWithDetails,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ✅ Check if Job is Saved
+exports.isJobSaved = async (req, res) => {
+  try {
+    const { userId, jobId } = req.query;
+
+    if (!userId || !jobId) {
+      return res.status(400).json({ error: 'userId and jobId are required' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const isSaved = user.savedJobs.includes(jobId);
+
+    res.status(200).json({
+      isSaved,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

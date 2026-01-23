@@ -108,6 +108,42 @@ export const authAPI = {
     });
     return res.json();
   },
+
+  checkEmailExists: async (email) => {
+    const res = await fetch(`${API_BASE_URL}/auth/check-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    return res.json();
+  },
+
+  sendOTP: async (email) => {
+    const res = await fetch(`${API_BASE_URL}/auth/send-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    return res.json();
+  },
+
+  verifyOTP: async (email, otp) => {
+    const res = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp }),
+    });
+    return res.json();
+  },
+
+  resetPassword: async (email, otp, newPassword, confirmPassword) => {
+    const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp, newPassword, confirmPassword }),
+    });
+    return res.json();
+  },
 };
 
 // ✅ Job Routes (for creating/updating jobs)
@@ -143,6 +179,38 @@ export const jobAPI = {
     });
     return res.json();
   },
+
+  saveJob: async (userId, jobId) => {
+    const res = await fetch(`${API_BASE_URL}/jobs/save`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, jobId }),
+    });
+    return res.json();
+  },
+
+  unsaveJob: async (userId, jobId) => {
+    const res = await fetch(`${API_BASE_URL}/jobs/unsave`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, jobId }),
+    });
+    return res.json();
+  },
+
+  getSavedJobs: async (userId) => {
+    const res = await fetch(`${API_BASE_URL}/jobs/saved/${userId}`);
+    return res.json();
+  },
+
+  isJobSaved: async (userId, jobId) => {
+    const res = await fetch(`${API_BASE_URL}/jobs/check-saved/${userId}?jobId=${jobId}`);
+    return res.json();
+  },
 };
 
 // ✅ Application Routes (for submitting/managing applications)
@@ -155,6 +223,11 @@ export const applicationAPI = {
       },
       body: JSON.stringify(applicationData),
     });
+    return res.json();
+  },
+
+  getUserApplications: async (userId) => {
+    const res = await fetch(`${API_BASE_URL}/applications/user/${userId}`);
     return res.json();
   },
 

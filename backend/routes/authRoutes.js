@@ -20,4 +20,13 @@ router.get('/users', authController.getAllUsers);
 // ✅ Delete User
 router.delete('/users/:id', authController.deleteUser);
 
+// ✅ Forgotten Password Routes
+router.post('/check-email', authController.checkEmailExists);
+
+router.post('/send-otp', authController.sendOTP);
+
+router.post('/verify-otp', authController.verifyOTP);
+
+router.post('/reset-password', authController.resetPassword);
+
 module.exports = router;

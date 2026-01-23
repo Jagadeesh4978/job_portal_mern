@@ -1,41 +1,165 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { displayAPI, jobAPI } from "../services/api";
 import "./style.css";
 import Footer from "../components/Footer";
 
 const JobDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [toast, setToast] = useState(null);
 
-  // 🔹 Temporary static data (replace with API later)
-  const job = {
-    title: "Business Development Intern",
-    company: "Instasell Technology",
-    experience: "0 - 5 years",
-    salary: "₹ 2.4 - 3 Lacs P.A.",
-    location: "Bengaluru (Indira Nagar)",
-    posted: "1 day ago",
-    openings: 1,
-    applicants: 29,
-    description:
-      "We are looking for a Business Development Intern who can help us expand our customer base and maintain strong client relationships.",
-    highlights: [
-      "Work with senior sales professionals",
-      "Hands-on exposure to business strategy",
-      "Opportunity for full-time conversion",
-    ],
-    skills: ["Communication", "Sales", "Negotiation", "Market Research"],
-    responsibilities: [
-      "Identify potential clients",
-      "Assist sales team in lead generation",
-      "Prepare reports and presentations",
-    ],
+  useEffect(() => {
+    const userInfoStr = localStorage.getItem("userInfo");
+    if (userInfoStr) {
+      setUserInfo(JSON.parse(userInfoStr));
+    }
+    fetchJobDetails();
+  }, [id]);
+
+  useEffect(() => {
+    if (userInfo && job) {
+      checkIfJobSaved();
+    }
+  }, [userInfo, job]);
+
+  const fetchJobDetails = async () => {
+    try {
+      setLoading(true);
+      const data = await displayAPI.getJobById(id);
+      
+      if (data.error) {
+        setError(data.error || "Failed to load job details");
+      } else {
+        setJob(data.job);
+      }
+    } catch (err) {
+      console.error("Error fetching job details:", err);
+      setError("Error loading job details");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const checkIfJobSaved = async () => {
+    try {
+      const result = await jobAPI.isJobSaved(userInfo._id, job._id);
+      if (result && result.isSaved !== undefined) {
+        setIsSaved(result.isSaved);
+      }
+    } catch (err) {
+      console.error("Error checking if job is saved:", err);
+    }
+  };
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleSaveJob = async () => {
+    if (!userInfo) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      if (isSaved) {
+        const result = await jobAPI.unsaveJob(userInfo._id, job._id);
+        if (result.error) {
+          showToast("Failed to unsave job", 'error');
+        } else {
+          setIsSaved(false);
+          showToast("Job removed from saved", 'success');
+        }
+      } else {
+        const result = await jobAPI.saveJob(userInfo._id, job._id);
+        if (result.error) {
+          showToast(result.error || "Failed to save job", 'error');
+        } else {
+          setIsSaved(true);
+          showToast("Job saved successfully!", 'success');
+        }
+      }
+    } catch (err) {
+      console.error("Error saving job:", err);
+      showToast("Error saving job", 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="job-details-page">
+        <div className="job-details-main">
+          <p>Loading job details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="job-details-page">
+        <div className="job-details-main">
+          <div style={{textAlign: 'center', padding: '40px'}}>
+            <p style={{color: '#e74c3c', fontSize: '16px'}}>{error}</p>
+            <button 
+              onClick={() => navigate("/jobs")}
+              style={{
+                padding: '10px 20px',
+                background: '#667eea',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: '600'
+              }}
+            >
+              Back to Jobs
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!job) {
+    return (
+      <div className="job-details-page">
+        <div className="job-details-main">
+          <p>Job not found</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="job-details-page">
-      {/* 🔹 MAIN CONTENT */}
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`toast-notification ${toast.type}`}>
+          <div className="toast-content">
+            <span className="toast-message">{toast.message}</span>
+            <button 
+              className="toast-close"
+              onClick={() => setToast(null)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="job-details-main">
         {/* Job Header Card */}
         <div className="job-header-card">
@@ -45,22 +169,33 @@ const JobDetails = () => {
 
             <div className="job-meta">
               <span>{job.experience}</span>
-              <span>{job.salary}</span>
+              <span>
+                {job.salary && job.salary.min && job.salary.max
+                  ? `${job.salary.min} - ${job.salary.max}`
+                  : "Salary Not Specified"}
+              </span>
               <span>{job.location}</span>
             </div>
           </div>
 
           <div className="job-actions">
-            <button className="save-btn">Save</button>
-            <button className="apply-btn" onClick={() => navigate(`/apply/${id}`)}>Apply</button>
+            <button 
+              className={`save-btn ${isSaved ? 'saved' : ''}`}
+              onClick={handleSaveJob}
+              disabled={isSaving}
+            >
+              {isSaving ? 'Saving...' : isSaved ? 'Saved' : 'Save'}
+            </button>
+            <button className="apply-btn" onClick={() => navigate(`/apply/${id}`)}>
+              Apply
+            </button>
           </div>
         </div>
 
         {/* Job Stats */}
         <div className="job-stats">
-          <span>Posted: {job.posted}</span>
-          <span>Openings: {job.openings}</span>
-          <span>Applicants: {job.applicants}</span>
+          <span>Posted: {new Date(job.createdAt).toLocaleDateString()}</span>
+          <span>Status: {job.status || 'Open'}</span>
         </div>
 
         {/* Job Description */}
@@ -69,43 +204,50 @@ const JobDetails = () => {
           <p>{job.description}</p>
         </section>
 
-        {/* Job Highlights */}
-        <section className="job-section">
-          <h2>Job Highlights</h2>
-          <ul>
-            {job.highlights.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </section>
+        {/* Requirements */}
+        {job.requirements && job.requirements.length > 0 && (
+          <section className="job-section">
+            <h2>Requirements</h2>
+            <ul>
+              {job.requirements.map((req, index) => (
+                <li key={index}>{req}</li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* Key Skills */}
-        <section className="job-section">
-          <h2>Key Skills</h2>
-          <div className="skills">
-            {job.skills.map((skill, index) => (
-              <span key={index} className="skill-tag">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </section>
+        {job.skills && job.skills.length > 0 && (
+          <section className="job-section">
+            <h2>Key Skills</h2>
+            <div className="skills">
+              {job.skills.map((skill, index) => (
+                <span key={index} className="skill-tag">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
 
-        {/* Responsibilities */}
-        <section className="job-section">
-          <h2>Responsibilities</h2>
-          <ul>
-            {job.responsibilities.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </section>
+        {/* Posted By */}
+        {job.postedBy && (
+          <section className="job-section">
+            <h2>Posted By</h2>
+            <p>
+              <strong>{job.postedBy.firstName} {job.postedBy.lastName}</strong>
+              <br />
+              Email: {job.postedBy.email}
+            </p>
+          </section>
+        )}
       </div>
 
-      {/* 🔹 RELEVANT JOBS */}
       <Footer />
     </div>
   );
 };
+
+
 
 export default JobDetails;
